@@ -1,0 +1,16 @@
+{
+  "name": "AgroBovinaCaqueta",
+  "short_name": "AgroBC",
+  "description": "Gestión completa de ganado bovino y lechero",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f5f3",
+  "theme_color": "#1D9E75",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
