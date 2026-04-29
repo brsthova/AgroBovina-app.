@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroBC</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      min-height: 100vh
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #d0d0cc;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .15s;
+      font-family: inherit
+    }
+
+    .btn:hover {
+      background: #f0f0ed
+    }
+
+    .btn-green {
+      background: #1D9E75;
+      color: #fff;
+      border-color: #0F6E56
+    }
+
+    .btn-green:hover {
+      background: #0F6E56
+    }
+
+    .btn-red {
+      background: transparent;
+      color: #A32D2D;
+      border-color: #A32D2D
+    }
+
+    .btn-red:hover {
+      background: #FCEBEB
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.25rem
+    }
+
+    .stat {
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      border: 1px solid #e8e8e4
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 3px
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a
+    }
+
+    .stat-alert {
+      background: #FAEEDA;
+      border-color: #EF9F27
+    }
+
+    .stat-alert .stat-val {
+      color: #633806
+    }
+
+    .nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #e0e0dc;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap
+    }
+
+    .nav-btn {
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      white-space: nowrap
+    }
+
+    .nav-btn.active {
+      color: #1D9E75;
+      border-bottom-color: #1D9E75;
+      font-weight: 600
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .filters select,
+    .filters input {
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #d0d0cc;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 13px;
+      font-family: inherit
+    }
+
+    .animal-card {
+      background: #fff;
+      border: 1px solid #e8e8e4;
+      border-radius: 12px;
+      padding: .9rem 1.1rem;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color .15s
+    }
+
+    .animal-card:hover {
+      border-color: #aaa
+    }
+
+    .animal-card.sel {
+      border-color: #1D9E75;
+      border-width: 2px
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px
+    }
+
+    .animal-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a
+    }
+
+    .animal-sub {
+      font-size: 12px;
+      color: #888;
+      margin-top: 3px
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 4px
+    }
+
+    .b-m {
+      background: #E6F1FB;
+      color: #185FA5
+    }
+
+    .b-f {
+      background: #FBEAF0;
+      color: #993556
+    }
+
+    .b-ok {
+      background: #EAF3DE;
+      color: #3B6D11
+    }
+
+    .b-warn {
+      background: #FAEEDA;
+      color: #633806
+    }
+
+    .b-gray {
+      background: #F1EFE8;
+      color: #5F5E5A
+    }
+
+    .card-acts {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0
+    }
+
+    .detail-wrap {
+      background: #fff;
+      border: 1px solid #e8e8e4;
+      border-radius: 12px;
+      padding: 1.1rem
+    }
+
+    .section-hd {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin: 1rem 0 .6rem
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .field label {
+      font-size: 12px;
+      color: #666
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #d0d0cc;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 13px;
+      font-family: inherit
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 56px
+    }
+
+    .ev-item {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0ed
+    }
+
+    .ev-item:last-child {
+      border: none
+    }
+
+    .ev-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0
+    }
+
+    .ev-main {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a
+    }
+
+    .ev-sub {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px
+    }
+
+    .ev-date {
+      font-size: 11px;
+      color: #aaa
+    }
+
+    .chart-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: .5rem
+    }
+
+    .chart-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .chart-bar-label {
+      font-size: 12px;
+      color: #888;
+      width: 72px;
+      text-align: right;
+      flex-shrink: 0
+    }
+
+    .chart-bar-bg {
+      flex: 1;
+      background: #f0f0ed;
+      border-radius: 4px;
+      height: 16px;
+      overflow: hidden
+    }
+
+    .chart-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: #1D9E75;
+      transition: width .4s
+    }
+
+    .chart-bar-val {
+      font-size: 12px;
+      color: #888;
+      min-width: 34px
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px
+    }
+
+    .alert-vac {
+      background: #FAEEDA
+    }
+
+    .alert-parto {
+      background: #FBEAF0
+    }
+
+    .alert-vencida {
+      background: #FCEBEB
+    }
+
+    .alert-txt {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a;
+      cursor: pointer
+    }
+
+    .alert-txt:hover {
+      color: #1D9E75
+    }
+
+    .alert-sub {
+      font-size: 12px;
+      color: #666
+    }
+
+    .empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: #aaa;
+      font-size: 14px
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .38);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 60px
+    }
+
+    .modal-overlay.open {
+      display: flex
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.4rem;
+      width: min(500px, 94vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .18)
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1a1a1a
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 1rem
+    }
+
+    .mrow {
+      margin-bottom: 10px
+    }
+
+    .export-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #d0d0cc;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 13px;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px
+    }
+
+    .export-btn:hover {
+      background: #f0f0ed
+    }
+
+    @media(max-width:500px) {
+
+      .grid2,
+      .grid3 {
+        grid-template-columns: 1fr
+      }
+
+      .title {
+        font-size: 18px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">AgroBovinaCaqueta</div>
+        <div class="subtitle">Gestion completa de ganado</div>
+      </div>
+      <div>
+        <button id="btn-install" class="btn btn-green" style="display: none; margin-right: 8px; background: #0F6E56;">📲 Instalar App</button>
+        <button class="btn btn-green" onclick="openAddModal()">+ Agregar animal</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats-bar"></div>
+    <div id="alert-bar"></div>
+
+    <div class="nav">
+      <div class="nav-btn active" onclick="goTab('lista',this)">Lista del hato</div>
+      <div class="nav-btn" onclick="goTab('detalle',this)" id="tab-det">Detalle animal</div>
+      <div class="nav-btn" onclick="goTab('leche',this)">Produccion de leche</div>
+      <div class="nav-btn" onclick="goTab('alertas',this)">Alertas</div>
+      <div class="nav-btn" onclick="goTab('reportes',this)">Reportes</div>
+    </div>
+
+    <div id="view-lista">
+      <div class="filters">
+        <input id="f-search" placeholder="Buscar por nombre o arete..." oninput="renderList()"
+          style="flex:1;min-width:140px" />
+        <select id="f-sexo" onchange="renderList()">
+          <option value="">Todos los sexos</option>
+          <option>Hembra</option>
+          <option>Macho</option>
+        </select>
+        <select id="f-raza" onchange="renderList()">
+          <option value="">Todas las razas</option>
+        </select>
+        <select id="f-sort" onchange="renderList()">
+          <option value="nombre">Nombre</option>
+          <option value="arete">Arete</option>
+          <option value="peso">Peso</option>
+          <option value="edad">Edad</option>
+        </select>
+      </div>
+      <div id="animal-list"></div>
+    </div>
+
+    <div id="view-detalle" style="display:none">
+      <div id="detail-content"></div>
+    </div>
+    <div id="view-leche" style="display:none">
+      <div id="leche-content"></div>
+    </div>
+    <div id="view-alertas" style="display:none">
+      <div id="alertas-content"></div>
+    </div>
+    <div id="view-reportes" style="display:none">
+      <div id="reportes-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal agregar/editar animal -->
+  <div class="modal-overlay" id="modal-add">
+    <div class="modal">
+      <div class="modal-title" id="modal-add-title">Agregar animal</div>
+      <div class="grid2 mrow">
+        <div class="field"><label>ID / Arete *</label><input id="fa-arete" placeholder="Ej: 001" /></div>
+        <div class="field"><label>Nombre</label><input id="fa-nombre" placeholder="Ej: Canela" /></div>
+      </div>
+      <div class="grid2 mrow">
+        <div class="field"><label>Sexo</label><select id="fa-sexo">
+            <option>Hembra</option>
+            <option>Macho</option>
+          </select></div>
+        <div class="field"><label>Raza</label><input id="fa-raza" placeholder="Ej: Cebu, Holstein..." /></div>
+      </div>
+      <div class="grid2 mrow">
+        <div class="field"><label>Fecha de nacimiento</label><input id="fa-fecha" type="date" /></div>
+        <div class="field"><label>Peso (kg)</label><input id="fa-peso" type="number" placeholder="Ej: 350" /></div>
+      </div>
+      <div class="grid2 mrow">
+        <div class="field"><label>Color / Marcas</label><input id="fa-color" placeholder="Ej: Cafe con blanco" /></div>
+        <div class="field"><label>Procedencia</label><input id="fa-origen" placeholder="Ej: Finca El Paraiso" /></div>
+      </div>
+      <div class="grid2 mrow">
+        <div class="field"><label>Madre (arete)</label><input id="fa-madre" placeholder="Arete de la madre" /></div>
+        <div class="field"><label>Padre (arete)</label><input id="fa-padre" placeholder="Arete del padre" /></div>
+      </div>
+      <div class="field mrow"><label>Notas</label><textarea id="fa-notas"
+          placeholder="Observaciones adicionales..."></textarea></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-add')">Cancelar</button>
+        <button class="btn btn-green" onclick="saveAnimal()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal evento -->
+  <div class="modal-overlay" id="modal-event">
+    <div class="modal">
+      <div class="modal-title">Registrar evento</div>
+      <div class="field mrow">
+        <label>Tipo de evento</label>
+        <select id="ev-tipo" onchange="updateEvFields()">
+          <option>Parto</option>
+          <option>Pulsaciones</option>
+          <option>Peso</option>
+          <option>Vacuna</option>
+          <option>Enfermedad</option>
+          <option>Celo</option>
+          <option>Monta</option>
+          <option>Destete</option>
+          <option>Muerte</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="field mrow"><label>Fecha</label><input id="ev-fecha" type="date" /></div>
+      <div id="ev-extra"></div>
+      <div class="field mrow"><label>Notas</label><textarea id="ev-notas"
+          placeholder="Detalles adicionales..."></textarea></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-event')">Cancelar</button>
+        <button class="btn btn-green" onclick="saveEvent()">Registrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal leche -->
+  <div class="modal-overlay" id="modal-leche-add">
+    <div class="modal">
+      <div class="modal-title">Registrar produccion de leche</div>
+      <div class="field mrow"><label>Animal</label><select id="ml-animal" style="width:100%"></select></div>
+      <div class="grid2 mrow">
+        <div class="field"><label>Fecha</label><input id="ml-fecha" type="date" /></div>
+        <div class="field"><label>Litros</label><input id="ml-litros" type="number" step="0.1" placeholder="Ej: 12.5" />
+        </div>
+      </div>
+      <div class="field mrow"><label>Notas</label><input id="ml-notas" placeholder="Opcional" /></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-leche-add')">Cancelar</button>
+        <button class="btn btn-green" onclick="saveLeche()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let animals = [], leche = [], selId = null, editId = null;
+
+    const evColors = {
+      Parto: '#C0DD97', Pulsaciones: '#85B7EB', Peso: '#FAC775',
+      Vacuna: '#9FE1CB', Enfermedad: '#F09595', Celo: '#F4C0D1',
+      Monta: '#CECBF6', Destete: '#D3D1C7', Muerte: '#888780', Otro: '#B4B2A9'
+    };
+
+    function today() { return new Date().toISOString().split('T')[0]; }
+    function addDays(d, n) { const dt = new Date(d); dt.setDate(dt.getDate() + n); return dt.toISOString().split('T')[0]; }
+    function diffDays(a, b) { return Math.round((new Date(b) - new Date(a)) / (1000 * 60 * 60 * 24)); }
+    function calcEdad(f) {
+      if (!f) return '—';
+      const d = new Date(f), n = new Date();
+      let y = n.getFullYear() - d.getFullYear(), m = n.getMonth() - d.getMonth();
+      if (m < 0) { y--; m += 12; }
+      return y > 0 ? y + 'a ' + m + 'm' : m + 'm';
+    }
+
+    function saveData() {
+      try { localStorage.setItem('hato_animals', JSON.stringify(animals)); localStorage.setItem('hato_leche', JSON.stringify(leche)); } catch (e) { }
+    }
+    function loadData() {
+      try {
+        const a = localStorage.getItem('hato_animals'); if (a) animals = JSON.parse(a);
+        const l = localStorage.getItem('hato_leche'); if (l) leche = JSON.parse(l);
+      } catch (e) { }
+    }
+
+    function updateStats() {
+      const total = animals.length;
+      const hem = animals.filter(a => a.sexo === 'Hembra').length;
+      const mac = animals.filter(a => a.sexo === 'Macho').length;
+      const hoy = today();
+      const proxVac = animals.filter(a => {
+        const vs = a.events.filter(e => e.tipo === 'Vacuna').sort((x, y) => y.fecha.localeCompare(x.fecha));
+        const prox = vs.length ? addDays(vs[0].fecha, 180) : null;
+        if (!prox) return false;
+        const dias = diffDays(hoy, prox);
+        return dias >= 0 && dias <= 30;
+      }).length;
+      const litHoy = leche.filter(l => l.fecha === hoy).reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+      document.getElementById('stats-bar').innerHTML = `
+    <div class="stat"><div class="stat-label">Total animales</div><div class="stat-val">${total}</div></div>
+    <div class="stat"><div class="stat-label">Hembras</div><div class="stat-val">${hem}</div></div>
+    <div class="stat"><div class="stat-label">Machos</div><div class="stat-val">${mac}</div></div>
+    <div class="stat${proxVac > 0 ? ' stat-alert' : ''}"><div class="stat-label">Alertas vacuna</div><div class="stat-val">${proxVac}</div></div>
+    <div class="stat"><div class="stat-label">Leche hoy (L)</div><div class="stat-val">${litHoy.toFixed(1)}</div></div>
+  `;
+      updateRazaFilter();
+      renderAlerts();
+    }
+
+    function updateRazaFilter() {
+      const sel = document.getElementById('f-raza');
+      const cur = sel.value;
+      const razas = [...new Set(animals.map(a => a.raza).filter(Boolean))].sort();
+      sel.innerHTML = '<option value="">Todas las razas</option>' + razas.map(r => `<option${r === cur ? ' selected' : ''}>${r}</option>`).join('');
+    }
+
+    function goTab(tab, el) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      ['lista', 'detalle', 'leche', 'alertas', 'reportes'].forEach(v => {
+        document.getElementById('view-' + v).style.display = v === tab ? 'block' : 'none';
+      });
+      if (tab === 'detalle') renderDetail();
+      if (tab === 'leche') renderLeche();
+      if (tab === 'alertas') renderAlerts();
+      if (tab === 'reportes') renderReportes();
+    }
+
+    function renderList() {
+      const search = (document.getElementById('f-search').value || '').toLowerCase();
+      const sexo = document.getElementById('f-sexo').value;
+      const raza = document.getElementById('f-raza').value;
+      const sort = document.getElementById('f-sort').value;
+      let list = animals.filter(a => {
+        if (sexo && a.sexo !== sexo) return false;
+        if (raza && a.raza !== raza) return false;
+        if (search && !a.nombre.toLowerCase().includes(search) && !a.arete.toLowerCase().includes(search)) return false;
+        return true;
+      });
+      list.sort((a, b) => {
+        if (sort === 'peso') return (parseFloat(b.peso) || 0) - (parseFloat(a.peso) || 0);
+        if (sort === 'edad') return (a.fecha || '').localeCompare(b.fecha || '');
+        if (sort === 'arete') return a.arete.localeCompare(b.arete);
+        return (a.nombre || a.arete).localeCompare(b.nombre || b.arete);
+      });
+      const c = document.getElementById('animal-list');
+      if (!list.length) { c.innerHTML = '<div class="empty">No se encontraron animales con estos filtros.</div>'; return; }
+      const hoy = today();
+      c.innerHTML = list.map(a => {
+        const litHoy = leche.filter(l => l.animalId === a.id && l.fecha === hoy).reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+        const montas = a.events.filter(e => e.tipo === 'Monta').sort((x, y) => y.fecha.localeCompare(x.fecha));
+        const diasParto = montas.length ? diffDays(hoy, addDays(montas[0].fecha, 283)) : null;
+        return `<div class="animal-card${selId === a.id ? ' sel' : ''}" onclick="selectAnimal('${a.id}')">
+      <div class="card-top">
+        <div>
+          <div class="animal-name">${a.nombre || 'Sin nombre'} <span style="font-weight:400;color:#888;font-size:13px">#${a.arete}</span></div>
+          <div class="animal-sub">${a.raza || 'Raza n/e'} · ${a.peso ? a.peso + ' kg' : 'Sin peso'} · ${calcEdad(a.fecha)} · ${a.events.length} evento(s)</div>
+          <div style="margin-top:5px">
+            <span class="badge ${a.sexo === 'Hembra' ? 'b-f' : 'b-m'}">${a.sexo}</span>
+            ${litHoy > 0 ? `<span class="badge b-ok">${litHoy.toFixed(1)} L hoy</span>` : ''}
+            ${diasParto !== null && diasParto >= 0 && diasParto <= 30 ? `<span class="badge b-warn">Parto ~${diasParto}d</span>` : ''}
+          </div>
+        </div>
+        <div class="card-acts">
+          <button class="btn btn-sm" onclick="event.stopPropagation();editAnimal('${a.id}')">Editar</button>
+          <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deleteAnimal('${a.id}')">Eliminar</button>
+        </div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    function selectAnimal(id) {
+      selId = id;
+      renderList();
+      document.querySelector('.nav-btn:nth-child(2)').click();
+    }
+
+    function renderDetail() {
+      const c = document.getElementById('detail-content');
+      if (!selId) { c.innerHTML = '<div class="empty">Selecciona un animal de la lista para ver su detalle.</div>'; return; }
+      const a = animals.find(x => x.id === selId);
+      if (!a) { c.innerHTML = '<div class="empty">Animal no encontrado.</div>'; return; }
+      const hijos = animals.filter(x => x.madre === a.arete || x.padre === a.arete);
+      const madre = animals.find(x => x.arete === a.madre);
+      const padre = animals.find(x => x.arete === a.padre);
+      const litTotal = leche.filter(l => l.animalId === a.id).reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+      c.innerHTML = `
+    <div class="detail-wrap" style="margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:.9rem">
+        <div>
+          <div style="font-size:17px;font-weight:600;color:#1a1a1a">${a.nombre || 'Sin nombre'} <span style="font-size:13px;font-weight:400;color:#888">#${a.arete}</span></div>
+          <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap">
+            <span class="badge ${a.sexo === 'Hembra' ? 'b-f' : 'b-m'}">${a.sexo}</span>
+            ${a.raza ? `<span class="badge b-gray">${a.raza}</span>` : ''}
+          </div>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="openEventModal()">+ Evento</button>
+      </div>
+      <div class="grid3" style="margin-bottom:.8rem">
+        <div class="stat"><div class="stat-label">Edad</div><div style="font-size:14px;font-weight:600;color:#1a1a1a">${calcEdad(a.fecha)}</div></div>
+        <div class="stat"><div class="stat-label">Peso</div><div style="font-size:14px;font-weight:600;color:#1a1a1a">${a.peso ? a.peso + ' kg' : '—'}</div></div>
+        <div class="stat"><div class="stat-label">Leche total</div><div style="font-size:14px;font-weight:600;color:#1a1a1a">${litTotal.toFixed(1)} L</div></div>
+      </div>
+      <div style="font-size:12px;color:#888;display:flex;flex-wrap:wrap;gap:12px">
+        ${a.color ? `<span>Color: ${a.color}</span>` : ''}
+        ${a.origen ? `<span>Origen: ${a.origen}</span>` : ''}
+        ${madre ? `<span>Madre: ${madre.nombre || madre.arete}</span>` : a.madre ? `<span>Madre: ${a.madre}</span>` : ''}
+        ${padre ? `<span>Padre: ${padre.nombre || padre.arete}</span>` : a.padre ? `<span>Padre: ${a.padre}</span>` : ''}
+        ${a.notas ? `<span>Nota: ${a.notas}</span>` : ''}
+      </div>
+      ${hijos.length ? `<div style="margin-top:.7rem;font-size:12px;color:#888">Hijos registrados: ${hijos.map(h => `<span style="color:#1D9E75;cursor:pointer" onclick="selectAnimal('${h.id}')">${h.nombre || h.arete}</span>`).join(', ')}</div>` : ''}
+    </div>
+    <div class="section-hd">Historial de eventos (${a.events.length})</div>
+    <div class="detail-wrap">
+      ${!a.events.length ? '<div class="empty" style="padding:1rem">Sin eventos aun</div>' :
+          [...a.events].reverse().map(ev => `
+          <div class="ev-item">
+            <div class="ev-dot" style="background:${evColors[ev.tipo] || '#888'}"></div>
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+                <span class="ev-main">${ev.tipo}</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="ev-date">${ev.fecha}</span>
+                  <button class="btn btn-sm btn-red" onclick="deleteEvent('${a.id}','${ev.id}')">X</button>
+                </div>
+              </div>
+              ${ev.extra ? `<div class="ev-sub">${ev.extra}</div>` : ''}
+              ${ev.notas ? `<div class="ev-sub">${ev.notas}</div>` : ''}
+            </div>
+          </div>`).join('')}
+    </div>`;
+    }
+
+    function renderLeche() {
+      const hembras = animals.filter(a => a.sexo === 'Hembra');
+      const sel = document.getElementById('ml-animal');
+      sel.innerHTML = hembras.map(a => `<option value="${a.id}">${a.nombre || a.arete}</option>`).join('');
+      const byAnimal = {};
+      leche.forEach(l => { if (!byAnimal[l.animalId]) byAnimal[l.animalId] = []; byAnimal[l.animalId].push(l); });
+      const hoy = today();
+      const litHoy = leche.filter(l => l.fecha === hoy).reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+      const litMes = leche.filter(l => l.fecha.slice(0, 7) === hoy.slice(0, 7)).reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+      const litTotal = leche.reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+      document.getElementById('leche-content').innerHTML = `
+    <div class="stats" style="margin-bottom:1rem">
+      <div class="stat"><div class="stat-label">Produccion hoy</div><div class="stat-val">${litHoy.toFixed(1)} L</div></div>
+      <div class="stat"><div class="stat-label">Produccion mes</div><div class="stat-val">${litMes.toFixed(1)} L</div></div>
+      <div class="stat"><div class="stat-label">Total historico</div><div class="stat-val">${litTotal.toFixed(1)} L</div></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+      <button class="btn btn-green btn-sm" onclick="openLecheModal()">+ Registrar produccion</button>
+    </div>
+    ${hembras.length === 0 ? '<div class="empty">No hay hembras registradas.</div>' :
+          '<div class="section-hd">Produccion por animal</div>' +
+          hembras.map(a => {
+            const regs = (byAnimal[a.id] || []).sort((x, y) => y.fecha.localeCompare(x.fecha));
+            const tot = regs.reduce((s, l) => s + parseFloat(l.litros || 0), 0);
+            return `<div class="detail-wrap" style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;gap:6px">
+            <div style="font-size:14px;font-weight:600;color:#1a1a1a">${a.nombre || a.arete}</div>
+            <span class="badge b-ok">${tot.toFixed(1)} L total</span>
+          </div>
+          <div class="chart-bar-wrap">
+            ${regs.slice(0, 6).map(r => `
+              <div class="chart-bar-row">
+                <div class="chart-bar-label">${r.fecha.slice(5)}</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.min(100, Math.round(parseFloat(r.litros) / 20 * 100))}%"></div></div>
+                <div class="chart-bar-val">${parseFloat(r.litros).toFixed(1)}L</div>
+                <button class="btn btn-sm btn-red" onclick="deleteLeche('${r.id}')">X</button>
+              </div>`).join('')}
+          </div>
+          ${regs.length === 0 ? '<div style="font-size:12px;color:#aaa;padding:.5rem 0">Sin registros aun</div>' : ''}
+        </div>`;
+          }).join('')}`;
+    }
+
+    function renderAlerts() {
+      const hoy = today();
+      const alerts = [];
+      animals.forEach(a => {
+        const vs = a.events.filter(e => e.tipo === 'Vacuna').sort((x, y) => y.fecha.localeCompare(x.fecha));
+        if (vs.length) {
+          const proxVac = addDays(vs[0].fecha, 180);
+          const dias = diffDays(hoy, proxVac);
+          if (dias >= 0 && dias <= 30) alerts.push({ tipo: 'vacuna', animal: a, msg: `Vacunacion proxima en ${dias} dias (${proxVac})`, cls: 'alert-vac' });
+          if (dias < 0) alerts.push({ tipo: 'vacuna', animal: a, msg: `Vacunacion VENCIDA hace ${Math.abs(dias)} dias`, cls: 'alert-vencida' });
+        }
+        const montas = a.events.filter(e => e.tipo === 'Monta').sort((x, y) => y.fecha.localeCompare(x.fecha));
+        if (montas.length) {
+          const fechaParto = addDays(montas[0].fecha, 283);
+          const dp = diffDays(hoy, fechaParto);
+          if (dp >= 0 && dp <= 45) alerts.push({ tipo: 'parto', animal: a, msg: `Parto estimado en ${dp} dias (${fechaParto})`, cls: 'alert-parto' });
+        }
+      });
+      const c = document.getElementById('alertas-content');
+      if (!alerts.length) { c.innerHTML = '<div class="empty">Sin alertas activas. Todo en orden.</div>'; return; }
+      c.innerHTML = '<div class="section-hd">Alertas activas (' + alerts.length + ')</div>' + alerts.map(al => `
+    <div class="alert-item ${al.cls}">
+      <div style="width:8px;height:8px;border-radius:50%;background:${al.tipo === 'vacuna' ? '#BA7517' : '#D4537E'};flex-shrink:0;margin-top:4px"></div>
+      <div>
+        <div class="alert-txt" onclick="selectAnimal('${al.animal.id}')">${al.animal.nombre || al.animal.arete}</div>
+        <div class="alert-sub">${al.msg}</div>
+      </div>
+    </div>`).join('');
+    }
+
+    function renderReportes() {
+      const razas = {}, evTipos = {};
+      animals.forEach(a => { const r = a.raza || 'Sin raza'; razas[r] = (razas[r] || 0) + 1; });
+      animals.forEach(a => a.events.forEach(e => { evTipos[e.tipo] = (evTipos[e.tipo] || 0) + 1; }));
+      const maxRaza = Math.max(...Object.values(razas), 1);
+      const maxEv = Math.max(...Object.values(evTipos), 1);
+      document.getElementById('reportes-content').innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:8px;flex-wrap:wrap">
+      <button class="export-btn" onclick="exportCSV()">Exportar CSV</button>
+      <button class="export-btn" onclick="exportJSON()">Exportar JSON</button>
+    </div>
+    <div class="grid2" style="gap:1rem">
+      <div class="detail-wrap">
+        <div class="section-hd" style="margin-top:0">Animales por raza</div>
+        <div class="chart-bar-wrap">
+          ${Object.entries(razas).sort((a, b) => b[1] - a[1]).map(([r, n]) => `
+            <div class="chart-bar-row">
+              <div class="chart-bar-label" style="font-size:11px">${r.slice(0, 10)}</div>
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.round(n / maxRaza * 100)}%;background:#378ADD"></div></div>
+              <div class="chart-bar-val">${n}</div>
+            </div>`).join('')}
+          ${!Object.keys(razas).length ? '<div style="font-size:12px;color:#aaa">Sin datos</div>' : ''}
+        </div>
+      </div>
+      <div class="detail-wrap">
+        <div class="section-hd" style="margin-top:0">Eventos por tipo</div>
+        <div class="chart-bar-wrap">
+          ${Object.entries(evTipos).sort((a, b) => b[1] - a[1]).map(([t, n]) => `
+            <div class="chart-bar-row">
+              <div class="chart-bar-label" style="font-size:11px">${t.slice(0, 10)}</div>
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.round(n / maxEv * 100)}%;background:${evColors[t] || '#888'}"></div></div>
+              <div class="chart-bar-val">${n}</div>
+            </div>`).join('')}
+          ${!Object.keys(evTipos).length ? '<div style="font-size:12px;color:#aaa">Sin datos</div>' : ''}
+        </div>
+      </div>
+    </div>
+    <div class="detail-wrap" style="margin-top:1rem">
+      <div class="section-hd" style="margin-top:0">Resumen general</div>
+      <div class="grid3">
+        <div class="stat"><div class="stat-label">Total animales</div><div style="font-size:16px;font-weight:600">${animals.length}</div></div>
+        <div class="stat"><div class="stat-label">Total eventos</div><div style="font-size:16px;font-weight:600">${animals.reduce((s, a) => s + a.events.length, 0)}</div></div>
+        <div class="stat"><div class="stat-label">Leche total (L)</div><div style="font-size:16px;font-weight:600">${leche.reduce((s, l) => s + parseFloat(l.litros || 0), 0).toFixed(1)}</div></div>
+      </div>
+    </div>`;
+    }
+
+    function openAddModal(id) {
+      editId = id || null;
+      const a = id ? animals.find(x => x.id === id) : null;
+      document.getElementById('modal-add-title').textContent = a ? 'Editar animal' : 'Agregar animal';
+      ['arete', 'nombre', 'raza', 'fecha', 'peso', 'color', 'origen', 'madre', 'padre', 'notas'].forEach(f => {
+        const el = document.getElementById('fa-' + f);
+        if (el) el.value = a ? a[f] || '' : '';
+      });
+      document.getElementById('fa-sexo').value = a ? a.sexo : 'Hembra';
+      document.getElementById('modal-add').classList.add('open');
+    }
+    function editAnimal(id) { openAddModal(id); }
+
+    function saveAnimal() {
+      const arete = document.getElementById('fa-arete').value.trim();
+      if (!arete) { alert('El arete / ID es requerido'); return; }
+      const data = { arete, sexo: document.getElementById('fa-sexo').value };
+      ['nombre', 'raza', 'fecha', 'peso', 'color', 'origen', 'madre', 'padre', 'notas'].forEach(f => {
+        data[f] = document.getElementById('fa-' + f).value.trim();
+      });
+      if (editId) {
+        const i = animals.findIndex(x => x.id === editId);
+        animals[i] = { ...animals[i], ...data };
+      } else {
+        animals.push({ ...data, id: 'a' + Date.now(), events: [] });
+      }
+      closeModal('modal-add');
+      saveData(); renderList(); updateStats();
+      if (selId && editId === selId) renderDetail();
+    }
+
+    function deleteAnimal(id) {
+      if (!confirm('Eliminar este animal y todos sus registros?')) return;
+      animals = animals.filter(a => a.id !== id);
+      leche = leche.filter(l => l.animalId !== id);
+      if (selId === id) selId = null;
+      saveData(); renderList(); updateStats(); renderDetail();
+    }
+
+    function openEventModal() {
+      document.getElementById('ev-fecha').value = today();
+      document.getElementById('ev-notas').value = '';
+      document.getElementById('ev-tipo').value = 'Parto';
+      updateEvFields();
+      document.getElementById('modal-event').classList.add('open');
+    }
+
+    function updateEvFields() {
+      const tipo = document.getElementById('ev-tipo').value;
+      let ex = '';
+      if (tipo === 'Parto') ex = `<div class="grid2 mrow"><div class="field"><label>Num. crias</label><input id="evc-n" type="number" min="1" value="1"/></div><div class="field"><label>Sexo de cria</label><select id="evc-s"><option>Hembra</option><option>Macho</option><option>Mixto</option></select></div></div><div class="field mrow"><label>ID/Nombre de cria(s)</label><input id="evc-id" placeholder="Opcional"/></div>`;
+      else if (tipo === 'Pulsaciones') ex = `<div class="field mrow"><label>Pulsaciones por minuto</label><input id="evc-pulso" type="number" placeholder="Ej: 65"/></div>`;
+      else if (tipo === 'Peso') ex = `<div class="field mrow"><label>Peso registrado (kg)</label><input id="evc-peso" type="number" placeholder="Ej: 380"/></div>`;
+      else if (tipo === 'Vacuna') ex = `<div class="field mrow"><label>Vacuna aplicada</label><input id="evc-vac" placeholder="Ej: Aftosa, Brucelosis..."/></div>`;
+      else if (tipo === 'Enfermedad') ex = `<div class="field mrow"><label>Diagnostico / Tratamiento</label><input id="evc-enf" placeholder="Ej: Mastitis"/></div>`;
+      else if (tipo === 'Monta') ex = `<div class="grid2 mrow"><div class="field"><label>Tipo</label><select id="evc-mtp"><option>Monta natural</option><option>Inseminacion artificial</option></select></div><div class="field"><label>Toro / Semen</label><input id="evc-toro" placeholder="ID o nombre"/></div></div>`;
+      document.getElementById('ev-extra').innerHTML = ex;
+    }
+
+    function saveEvent() {
+      if (!selId) return;
+      const tipo = document.getElementById('ev-tipo').value;
+      const fecha = document.getElementById('ev-fecha').value || today();
+      const notas = document.getElementById('ev-notas').value.trim();
+      let extra = '';
+      try {
+        if (tipo === 'Parto') { extra = document.getElementById('evc-n').value + ' cria(s) — ' + document.getElementById('evc-s').value + (document.getElementById('evc-id').value ? ' — ' + document.getElementById('evc-id').value : ''); }
+        else if (tipo === 'Pulsaciones') { const p = document.getElementById('evc-pulso').value; extra = p ? p + ' ppm' : ''; }
+        else if (tipo === 'Peso') { const p = document.getElementById('evc-peso').value; if (p) { const a = animals.find(x => x.id === selId); if (a) a.peso = p; extra = 'Peso: ' + p + ' kg'; } }
+        else if (tipo === 'Vacuna') { extra = document.getElementById('evc-vac').value; }
+        else if (tipo === 'Enfermedad') { extra = document.getElementById('evc-enf').value; }
+        else if (tipo === 'Monta') { extra = document.getElementById('evc-mtp').value + (document.getElementById('evc-toro').value ? ' — ' + document.getElementById('evc-toro').value : ''); }
+      } catch (e) { }
+      const a = animals.find(x => x.id === selId);
+      a.events.push({ id: 'e' + Date.now(), tipo, fecha, extra, notas });
+      closeModal('modal-event');
+      saveData(); renderDetail(); renderList(); updateStats();
+    }
+
+    function deleteEvent(aid, eid) {
+      const a = animals.find(x => x.id === aid);
+      a.events = a.events.filter(e => e.id !== eid);
+      saveData(); renderDetail(); updateStats();
+    }
+
+    function openLecheModal() {
+      document.getElementById('ml-fecha').value = today();
+      document.getElementById('ml-litros').value = '';
+      document.getElementById('ml-notas').value = '';
+      const hembras = animals.filter(a => a.sexo === 'Hembra');
+      document.getElementById('ml-animal').innerHTML = hembras.map(a => `<option value="${a.id}">${a.nombre || a.arete}</option>`).join('');
+      document.getElementById('modal-leche-add').classList.add('open');
+    }
+
+    function saveLeche() {
+      const aid = document.getElementById('ml-animal').value;
+      const fecha = document.getElementById('ml-fecha').value;
+      const litros = document.getElementById('ml-litros').value;
+      if (!litros) { alert('Ingresa los litros'); return; }
+      leche.push({ id: 'l' + Date.now(), animalId: aid, fecha, litros, notas: document.getElementById('ml-notas').value });
+      closeModal('modal-leche-add');
+      saveData(); renderLeche(); updateStats();
+    }
+
+    function deleteLeche(id) {
+      leche = leche.filter(l => l.id !== id);
+      saveData(); renderLeche(); updateStats();
+    }
+
+    function exportCSV() {
+      const rows = [['Arete', 'Nombre', 'Sexo', 'Raza', 'Nacimiento', 'Peso', 'Color', 'Origen', 'Madre', 'Padre', 'Notas', 'Num Eventos']];
+      animals.forEach(a => rows.push([a.arete, a.nombre, a.sexo, a.raza, a.fecha, a.peso, a.color, a.origen, a.madre, a.padre, a.notas, a.events.length]));
+      const csv = rows.map(r => r.map(v => '"' + (v || '') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'hato.csv'; a.click();
+    }
+
+    function exportJSON() {
+      const data = JSON.stringify({ animals, leche }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'hato.json'; a.click();
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+      m.addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+    });
+
+    loadData();
+    if (!animals.length) {
+      animals = [
+        {
+          id: 'd1', arete: '001', nombre: 'Canela', sexo: 'Hembra', raza: 'Cebú', fecha: '2020-03-15', peso: '380', color: 'Café', origen: 'Finca El Paraíso', madre: '', padre: '', notas: 'Buena productora',
+          events: [{ id: 'e1', tipo: 'Parto', fecha: '2023-04-10', extra: '1 cria(s) — Macho — Cafecito', notas: '' }, { id: 'e2', tipo: 'Vacuna', fecha: '2024-07-20', extra: 'Aftosa', notas: '' }, { id: 'e3', tipo: 'Monta', fecha: '2025-01-10', extra: 'Monta natural — Toro Bravero', notas: '' }, { id: 'e4', tipo: 'Pulsaciones', fecha: '2025-03-05', extra: '65 ppm', notas: 'Normal' }]
+        },
+        {
+          id: 'd2', arete: '002', nombre: 'Pintado', sexo: 'Macho', raza: 'Brahman', fecha: '2019-07-22', peso: '520', color: 'Blanco con negro', origen: '', madre: '', padre: '', notas: 'Semental',
+          events: [{ id: 'e5', tipo: 'Vacuna', fecha: '2024-06-15', extra: 'Brucelosis', notas: '' }, { id: 'e6', tipo: 'Peso', fecha: '2025-01-10', extra: 'Peso: 520 kg', notas: '' }]
+        },
+        {
+          id: 'd3', arete: '003', nombre: 'Estrella', sexo: 'Hembra', raza: 'Holstein', fecha: '2021-09-02', peso: '320', color: 'Negro con blanco', origen: 'Finca La Esperanza', madre: '001', padre: '002', notas: '',
+          events: [{ id: 'e7', tipo: 'Pulsaciones', fecha: '2025-02-14', extra: '70 ppm', notas: '' }]
+        }
+      ];
+      leche = [
+        { id: 'l1', animalId: 'd1', fecha: today(), litros: '14.5', notas: '' },
+        { id: 'l2', animalId: 'd1', fecha: addDays(today(), -1), litros: '13.0', notas: '' },
+        { id: 'l3', animalId: 'd3', fecha: today(), litros: '9.5', notas: '' }
+      ];
+      saveData();
+    }
+    renderList(); updateStats();
+
+    // PWA: Registro del Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          console.log('ServiceWorker registrado correctamente:', reg.scope);
+        }).catch(err => {
+          console.error('Error al registrar el ServiceWorker:', err);
+        });
+      });
+    }
+
+    // Lógica para el botón personalizado de "Instalar App"
+    let deferredPrompt;
+    const installBtn = document.getElementById('btn-install');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Previene el aviso automático para usar el nuestro
+      e.preventDefault();
+      deferredPrompt = e;
+      // Muestra el botón de instalar
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.style.display = 'none';
+      console.log('PWA Instalada');
+    });
+  </script>
+</body>
+
+</html>
