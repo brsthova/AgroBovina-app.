@@ -504,7 +504,10 @@
         <div class="title">AgroBovinaCaqueta</div>
         <div class="subtitle">Gestion completa de ganado</div>
       </div>
-      <button class="btn btn-green" onclick="openAddModal()">+ Agregar animal</button>
+      <div>
+        <button id="btn-install" class="btn btn-green" style="display: none; margin-right: 8px; background: #0F6E56;">📲 Instalar App</button>
+        <button class="btn btn-green" onclick="openAddModal()">+ Agregar animal</button>
+      </div>
     </div>
 
     <div class="stats" id="stats-bar"></div>
@@ -1091,6 +1094,45 @@
       saveData();
     }
     renderList(); updateStats();
+
+    // PWA: Registro del Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          console.log('ServiceWorker registrado correctamente:', reg.scope);
+        }).catch(err => {
+          console.error('Error al registrar el ServiceWorker:', err);
+        });
+      });
+    }
+
+    // Lógica para el botón personalizado de "Instalar App"
+    let deferredPrompt;
+    const installBtn = document.getElementById('btn-install');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Previene el aviso automático para usar el nuestro
+      e.preventDefault();
+      deferredPrompt = e;
+      // Muestra el botón de instalar
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.style.display = 'none';
+      console.log('PWA Instalada');
+    });
   </script>
 </body>
 
